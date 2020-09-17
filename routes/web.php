@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{BooksController,BoController};
+use App\Http\Controllers\{BooksController,AuthorController,imageController};
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +13,20 @@ use App\Http\Controllers\{BooksController,BoController};
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', function(){
+    return view('welcome');
+});
 
 Route::post('/books',[BooksController::class, 'store']);
-Route::patch('/books/{book}',[BooksController::class, 'update']);
+Route::patch('/books/{book}-{slug}',[BooksController::class, 'update']);
+Route::delete('/books/{id}-{slug}',[BooksController::class, 'destroy']);
 
+Route::post('/author',[AuthorController::class, 'store']);
+
+Route::get('/image/{path}', [imageController::class, 'show']);
+
+
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return Inertia\Inertia::render('Dashboard');
+})->name('dashboard');
